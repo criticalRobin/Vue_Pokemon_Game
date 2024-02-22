@@ -9,6 +9,11 @@
       @selection="checkAnswer($event)"
     />
   </div>
+
+  <div v-if="showAnswer">
+    <h2>{{ message }}</h2>
+    <button @click="newGame">Nuevo Juego</button>
+  </div>
 </template>
 
 <script>
@@ -26,6 +31,8 @@ export default {
       pokemonsArr: [],
       pokemon: null,
       showPokemon: false,
+      showAnswer: false,
+      message: "",
     };
   },
   methods: {
@@ -35,9 +42,18 @@ export default {
       this.pokemon = this.pokemonsArr[rndInt];
     },
     checkAnswer(pokemonId) {
-      if (pokemonId === this.pokemon.id) {
-        this.showPokemon = true;
-      }
+      this.showPokemon = true;
+      this.showAnswer = true;
+
+      this.pokemon.id === pokemonId
+        ? (this.message = `Correcto! Es ${this.pokemon.name}`)
+        : (this.message = `Incorrecto! Era ${this.pokemon.name}`);
+    },
+    newGame() {
+      this.showPokemon = false;
+      this.showAnswer = false;
+      this.message = "";
+      this.getPokemons();
     },
   },
   mounted() {
