@@ -3,6 +3,7 @@
 
   <div v-else>
     <h1>Quién es este Pokémon?</h1>
+    <Lives :lives="lives" />
     <PokemonPicture :pokemonId="pokemon.id" :showPokemon="showPokemon" />
     <PokemonOptions
       :pokemonsArr="pokemonsArr"
@@ -12,19 +13,24 @@
 
   <div v-if="showAnswer">
     <h2>{{ message }}</h2>
-    <button @click="newGame">Nuevo Juego</button>
+    <div>
+      <button v-if="gameOver" @click="newGame">Nuevo Juego</button>
+      <button v-else @click="continueGame">Continuar</button>
+    </div>
   </div>
 </template>
 
 <script>
 import PokemonPicture from "@/components/PokemonPicture.vue";
 import PokemonOptions from "@/components/PokemonOptions.vue";
+import Lives from "@/components/Lives.vue";
 import getPokemonOptions from "@/helpers/getPokemonOptions";
 
 export default {
   components: {
     PokemonPicture,
     PokemonOptions,
+    Lives,
   },
   data() {
     return {
@@ -33,6 +39,8 @@ export default {
       showPokemon: false,
       showAnswer: false,
       message: "",
+      lives: [1, 2, 3],
+      gameOver: false,
     };
   },
   methods: {
@@ -47,13 +55,24 @@ export default {
 
       this.pokemon.id === pokemonId
         ? (this.message = `Correcto! Es ${this.pokemon.name}`)
-        : (this.message = `Incorrecto! Era ${this.pokemon.name}`);
+        : (this.message = `Incorrecto! Era ${this.pokemon.name}`) &&
+          this.lives.pop();
+
+      if (this.lives.length === 0) this.gameOver = true;
     },
-    newGame() {
+    resetData() {
       this.showPokemon = false;
       this.showAnswer = false;
       this.message = "";
+      this.gameOver = false;
       this.getPokemons();
+    },
+    continueGame() {
+      this.resetData();
+    },
+    newGame() {
+      this.resetData();
+      this.lives = [1, 2, 3];
     },
   },
   mounted() {
