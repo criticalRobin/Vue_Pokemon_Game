@@ -1,4 +1,7 @@
-import { getPokemons, getPokemonNames } from "@/helpers/getPokemonOptions";
+import getPokemonOptions, {
+  getPokemons,
+  getPokemonNames,
+} from "@/helpers/getPokemonOptions";
 
 describe("getPokemonOptions helpers", () => {
   test("getPokemons debe retornar un arreglo de números", () => {
@@ -17,5 +20,17 @@ describe("getPokemonOptions helpers", () => {
     expect(pokemonNames[1].name).toBe("ivysaur");
     expect(pokemonNames[2].name).toBe("venusaur");
     expect(pokemonNames[3].name).toBe("charmander");
+  });
+
+  test("getPokemonOptions debe retornar un arreglo mezclado", async () => {
+    const pokemons = await getPokemonOptions();
+
+    expect(pokemons.length).toBe(4);
+    expect(pokemons).toEqual([
+      { name: expect.any(String), id: expect.any(Number) },
+      { name: expect.any(String), id: expect.any(Number) },
+      { name: expect.any(String), id: expect.any(Number) },
+      { name: expect.any(String), id: expect.any(Number) },
+    ]);
   });
 });
