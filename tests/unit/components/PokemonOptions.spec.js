@@ -16,4 +16,14 @@ describe("pruebas unitarias componente PokemonOptions", () => {
   test("debe hacer match con el snapshot", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
+
+  test("debe de mostrar las 4 opciones correctamente", () => {
+    const liElements = wrapper.findAll("li");
+
+    expect(liElements.length).toBe(4);
+    expect(liElements[0].text()).toBe("bulbasaur");
+    expect(liElements[1].text()).toBe("ivysaur");
+    expect(liElements[2].text()).toBe("venusaur");
+    expect(liElements[3].text()).toBe("charmander");
+  });
 });
